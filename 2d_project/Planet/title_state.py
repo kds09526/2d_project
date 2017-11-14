@@ -1,5 +1,5 @@
 import game_framework
-import sun_scene_state
+import space_map
 from pico2d import *
 
 
@@ -24,7 +24,7 @@ def handle_events(frame_time):
             if(event.type,event.key) == (SDL_KEYDOWN,SDLK_ESCAPE):
                 game_framework.quit()
             elif (event.type, event.key) ==(SDL_KEYDOWN, SDLK_SPACE):
-               game_framework.change_state(sun_scene_state)
+                game_framework.push_state(space_map)
 
 
 def draw(frame_time):

@@ -6,7 +6,7 @@ from pico2d import *
 from astronaut import Astronaut
 
 import game_framework
-import title_state
+import space_map
 import collision
 
 name = "SunSceneState"
@@ -114,7 +114,7 @@ def handle_events(frame_time):
             game_framework.quit()
         else:
             if event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
-                game_framework.change_state(title_state)
+                game_framework.pop_state()
             else:
                 astronaut.handle_event(event)
                 global plates
