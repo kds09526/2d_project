@@ -76,7 +76,7 @@ def enter():
     del(long_plate)
 
     global astronaut
-    astronaut = Astronaut()
+    astronaut = Astronaut(512, 500, 115)
 
 def exit():
     global background_image

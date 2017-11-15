@@ -4,6 +4,9 @@ from pico2d import *
 class Astronaut:
     image = None
 
+    # 제일아래 발판
+    last_plate = 0
+
     # 거리 환산
     PIXEL_PER_METER = (1 / 0.03)  # 1 pixel 3 cm
 
@@ -48,7 +51,7 @@ class Astronaut:
     move_frame = 0
     move_total_frame = 0
     TIME_PER_MOVE = 3.8
-    MOVE_PER_TIME = 1.0 / TIME_PER_SHOT
+    MOVE_PER_TIME = 1.0 / TIME_PER_MOVE
     FRAME_PER_MOVE = 3
 
     # 점프 관련
@@ -70,10 +73,20 @@ class Astronaut:
     JUMP_MOVE_SPEED_MPS = (JUMP_MOVE_SPEED_MPM / 60.0)
     JUMP_MOVE_SPEED_PPS = (JUMP_MOVE_SPEED_MPS * PIXEL_PER_METER)
 
-    def __init__(self):
+    def __init__(self, x, y, last_plate):
         if self.image == None:
             self.image = load_image('astronaut.png')
-            self.x, self.y = 512, 500
+            self.x, self.y = x, y
+            self.last_plate = last_plate
+
+    def reset(self, x, y):
+        self.x, self.y = x, y
+        self.direction = Astronaut.RIGHT_DIRECT
+        self.is_move = 0
+        self.move_frame = 0
+        self.jump_state = Astronaut.FALLING
+        self.now_jump_speed = 0
+        self.jump_gap = 0
 
     def update(self, frame_time):
         # 공격
@@ -115,7 +128,9 @@ class Astronaut:
         elif self.jump_gap > 0 and not(self.jump_state == self.JUMP):
             self.y += self.jump_gap
             self.jump_gap = 0
-        self.y = max(self.y, 115)
+        if self.y <= self.last_plate:
+            self.y = self.last_plate
+            self.jump_state = Astronaut.NOT_JUMP
 
     def handle_event(self, event):
         # 바운딩박스 그리기
