@@ -14,7 +14,6 @@ name = "SunSceneState"
 background_image = None
 plate_timer = 0.0
 plates = None
-short_plate_num = 0
 astronaut = None
 
 class Long_Plate:
@@ -42,26 +41,14 @@ class Long_Plate:
 
 class Short_Plate:
     image = None
-    x = None
-    y = None
+    x = 0
+    y = 0
     draw_bb_bool = False
 
-    def __init__(self):
+    def __init__(self, x, y):
         if self.image == None:
             self.image = load_image('sun_short_plate.png')
-
-        global short_plate_num
-        short_plate_num+=1
-        if short_plate_num == 1:
-            self.x,self.y = 351, 768 - 581
-        elif short_plate_num == 2:
-            self.x,self.y = 572, 768 - 422
-        elif short_plate_num == 3:
-            self.x,self.y = 189, 768 - 263
-        if random.randint(0, 1) == 0:
-            self.y_plus = 1
-        else:
-            self.y_plus = -1
+        self.x, self.y = x, y
 
     def handle_event(self, event):
         if event.type == SDL_KEYDOWN and event.key == SDLK_F12:
@@ -74,7 +61,7 @@ class Short_Plate:
         draw_rectangle(*self.get_bb())
 
     def draw(self,frame_time):
-        self.image.draw(self.x,self.y)
+        self.image.draw(self.x, self.y)
         if self.draw_bb_bool:
             self.draw_bb()
 
@@ -83,9 +70,10 @@ def enter():
     background_image = load_image('SunSceneBackGround1.png')
 
     global plates
-    plates = [Short_Plate() for i in range(3)]
+    plates = [Short_Plate(351,768 - 581),Short_Plate(572,768 - 422),Short_Plate(189,768 - 263)]
     long_plate = [Long_Plate()]
     plates = plates + long_plate
+    del(long_plate)
 
     global astronaut
     astronaut = Astronaut()
