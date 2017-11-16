@@ -3,7 +3,9 @@ import space_map
 
 import random
 from pico2d import *
+
 from astronaut import Astronaut
+import collision
 
 
 name = "TitleState"
@@ -20,6 +22,7 @@ class Menu_Button:
     width = 0
     height = 0
     draw_bb_bool = False
+    scene = None
 
     # 프레임 설정
     TIME_PER_MOVE = 1
@@ -29,11 +32,12 @@ class Menu_Button:
     move_total_frame = 0
     move_frame = 0
 
-    def __init__(self, x, y, width, height, image_name):
+    def __init__(self, x, y, width, height, image_name, scene):
         self.image = load_image(image_name)
         self.x, self.y = x, y
         self.width, self.height = width, height
         self.move_total_frame = random.randint(0,8)
+        self.scene = scene
 
     def handle_event(self, event):
         if event.type == SDL_KEYDOWN and event.key == SDLK_F12:
@@ -61,7 +65,10 @@ def enter():
     astronaut = Astronaut(512, 100, 68)
 
     global menu_button
-    menu_button = [Menu_Button(500, 500, 435, 140, 'title_name.png')]
+    menu_button = [Menu_Button(500, 525, 435, 140, 'title_name.png', None),
+                   Menu_Button(512, 275, 180, 164, 'start_button.png', space_map),
+                   Menu_Button(236, 275, 156, 164, 'help_button.png', None),
+                   Menu_Button(788, 275, 156, 164, 'exit_button.png', None)]
 
 def exit():
     global image
@@ -81,9 +88,6 @@ def handle_events(frame_time):
         else:
             if(event.type,event.key) == (SDL_KEYDOWN,SDLK_ESCAPE):
                 game_framework.quit()
-            elif (event.type, event.key) ==(SDL_KEYDOWN, SDLK_SPACE):
-                astronaut.reset(512, 100)
-                game_framework.push_state(space_map)
             else:
                 astronaut.handle_event(event)
                 global menu_button
@@ -109,6 +113,15 @@ def update(frame_time):
     for button in menu_button:
         button.update(frame_time)
 
+    if astronaut.is_shot == True:
+        for button in  menu_button:
+            t_button_left, t_button_bottom, t_button_right, t_button_top = button.get_bb()
+            if collision.button_collid(frame_time, astronaut, t_button_left, t_button_bottom, t_button_right, t_button_top):
+                if button.scene == None:
+                    game_framework.quit()
+                else:
+                    astronaut.reset(512, 100)
+                    game_framework.push_state(button.scene)
 
 def pause():
     pass

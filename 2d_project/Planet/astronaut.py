@@ -84,9 +84,13 @@ class Astronaut:
         self.direction = Astronaut.RIGHT_DIRECT
         self.is_move = 0
         self.move_frame = 0
+        self.move_total_frame = 0
         self.jump_state = Astronaut.FALLING
         self.now_jump_speed = 0
         self.jump_gap = 0
+        self.is_shot = False
+        self.shot_frame = 0
+        self.shot_total_frame = 0
 
     def update(self, frame_time):
         # 공격
@@ -197,3 +201,4 @@ class Astronaut:
         self.image.clip_draw((self.weapon * 72) + self.move_frame * 72, (self.direction - self.shot_frame) * 96,72, 96, self.x, self.y)
         if self.draw_bb_bool:
             self.draw_bb()
+            draw_rectangle(0,self.last_plate - 42,1024,0)

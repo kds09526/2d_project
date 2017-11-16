@@ -92,6 +92,7 @@ def update(frame_time):
     global planets
     for planet in planets:
         planet.update(frame_time)
+    # delay(0.3)
 
 def draw(frame_time):
     clear_canvas()
