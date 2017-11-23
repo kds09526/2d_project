@@ -1,17 +1,12 @@
 import random
+import json
 from pico2d import *
 
 class Astronaut:
     image = None
 
-    # 제일아래 발판
-    last_plate = 0
-
     # 거리 환산
     PIXEL_PER_METER = (1 / 0.03)  # 1 pixel 3 cm
-
-    # 바운딩 박스 체크
-    draw_bb_bool = False
 
     # 걷는 속도
     RUN_SPEED_KMPH = 25  # Km / Hour
@@ -19,47 +14,23 @@ class Astronaut:
     RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
     RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
 
-    # 공격 여부 (False == 1, True = 세로 0,1 반복)
-    is_shot = False
-    shot_frame = 0
-    shot_total_frame = 0
     # 무기 프레임설정
-    TIME_PER_SHOT = 2
-    SHOT_PER_TIME = 1.0 / TIME_PER_SHOT
-    FRAME_PER_SHOT = 2
-    NORMAL_WEAPON, PURPLE_WEAPON, YELLOW_WEAPON, GREAN_WEAPON, RED_WEAPON = 0, 3, 6, 9, 12
-    weapon = NORMAL_WEAPON
-    def weapon_change(self):
-        if(self.weapon == self.NORMAL_WEAPON):
-            self.TIME_PER_SHOT = 2
-        elif(self.weapon == self.PURPLE_WEAPON):
-            self.TIME_PER_SHOT = 3
-        elif(self.weapon == self.YELLOW_WEAPON):
-            self.TIME_PER_SHOT = 5
-        elif(self.weapon == self.GREAN_WEAPON):
-            self.TIME_PER_SHOT = 2.5
-        elif(self.weapon == self.RED_WEAPON):
-            self.TIME_PER_SHOT = 1
-        self.SHOT_PER_TIME = 1.0 / self.TIME_PER_SHOT
+    weapon_property = {'normal_weapon' : { 'draw_frame_num' : 0, 'time_per_shot' : 2, 'frame_per_shot' : 2},
+                       'purple_weapon' : { 'draw_frame_num' : 3, 'time_per_shot' : 3, 'frame_per_shot' : 2},
+                       'yellow_weapon' : { 'draw_frame_num' : 6, 'time_per_shot' : 5, 'frame_per_shot' : 2},
+                       'green_weapon'  : { 'draw_frame_num' : 9, 'time_per_shot': 2.5, 'frame_per_shot': 2},
+                       'red_weapon'    : { 'draw_frame_num' : 12, 'time_per_shot' : 1, 'frame_per_shot' : 2} }
 
     # 방향
     LEFT_DIRECT, RIGHT_DIRECT, FRONT_DIRECT = 6, 3 ,0
-    direction = RIGHT_DIRECT
 
-    # 걷기 프레임 설정 (False == 1, True = 가로 0,1,2 반복)
-    is_move = 0
-    move_frame = 0
-    move_total_frame = 0
+    # 걷기 프레임
     TIME_PER_MOVE = 3.8
     MOVE_PER_TIME = 1.0 / TIME_PER_MOVE
     FRAME_PER_MOVE = 3
 
     # 점프 관련
     NOT_JUMP, JUMP, FALLING = 0, 1, 2
-    jump_state = FALLING
-    now_jump_speed = 0
-    jump_gap = 0
-    down_key = False
 
     GRAVITY_ACCELERATION_MPH = 98
 
@@ -76,8 +47,33 @@ class Astronaut:
     def __init__(self, x, y, last_plate):
         if self.image == None:
             self.image = load_image('image/astronaut/astronaut.png')
-            self.x, self.y = x, y
-            self.last_plate = last_plate
+        self.x, self.y = x, y
+
+        # 제일아래 발판
+        self.last_plate = last_plate
+
+        # 바운딩 박스 체크
+        self.draw_bb_bool = False
+
+        # 공격 여부 (False == 1, True = 세로 0,1 반복)
+        self.is_shot = False
+        self.shot_frame = 0
+        self.shot_total_frame = 0
+        self.weapon = 'normal_weapon'
+
+        # 방향
+        self.direction = Astronaut.RIGHT_DIRECT
+
+        # 걷기 프레임 설정 (False == 1, True = 가로 0,1,2 반복)
+        self.is_move = 0
+        self.move_frame = 0
+        self.move_total_frame = 0
+
+        # 점프 관련
+        self.jump_state = Astronaut.FALLING
+        self.now_jump_speed = 0
+        self.jump_gap = 0
+        self.down_key = False
 
     def reset(self, x, y):
         self.x, self.y = x, y
@@ -96,7 +92,7 @@ class Astronaut:
         # 공격
         if self.is_shot == True:
             self.shot_frame = int(self.shot_total_frame) % 2 + 1
-            self.shot_total_frame += Astronaut.FRAME_PER_SHOT * self.TIME_PER_SHOT * frame_time
+            self.shot_total_frame += self.weapon_property[self.weapon]['frame_per_shot'] * self.weapon_property[self.weapon]['time_per_shot'] * frame_time
 
         # 이동
         if self.is_move == 0:
@@ -159,20 +155,15 @@ class Astronaut:
 
         # 무기 교체
         elif event.type == SDL_KEYDOWN and event.key == SDLK_1:
-            self.weapon = self.NORMAL_WEAPON
-            self.weapon_change()
+            self.weapon = 'normal_weapon'
         elif event.type == SDL_KEYDOWN and event.key == SDLK_2:
-            self.weapon = self.PURPLE_WEAPON
-            self.weapon_change()
+            self.weapon = 'purple_weapon'
         elif event.type == SDL_KEYDOWN and event.key == SDLK_3:
-            self.weapon = self.YELLOW_WEAPON
-            self.weapon_change()
+            self.weapon = 'yellow_weapon'
         elif event.type == SDL_KEYDOWN and event.key == SDLK_4:
-            self.weapon = self.GREAN_WEAPON
-            self.weapon_change()
+            self.weapon = 'green_weapon'
         elif event.type == SDL_KEYDOWN and event.key == SDLK_5:
-            self.weapon = self.RED_WEAPON
-            self.weapon_change()
+            self.weapon = 'red_weapon'
 
         # 총발사
         elif event.type == SDL_KEYDOWN and event.key == SDLK_c:
@@ -198,7 +189,7 @@ class Astronaut:
         draw_rectangle(*self.get_bb())
 
     def draw(self,frame_time):
-        self.image.clip_draw((self.weapon * 72) + self.move_frame * 72, (self.direction - self.shot_frame) * 96,72, 96, self.x, self.y)
+        self.image.clip_draw((self.weapon_property[self.weapon]['draw_frame_num'] * 72) + self.move_frame * 72, (self.direction - self.shot_frame) * 96,72, 96, self.x, self.y)
         if self.draw_bb_bool:
             self.draw_bb()
             draw_rectangle(0,self.last_plate - 42,1024,0)

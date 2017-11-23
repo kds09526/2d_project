@@ -4,6 +4,7 @@ import game_framework
 
 from astronaut import Astronaut
 from plate import Plate
+from menu_button import Menu_Button
 
 def plate_collide(frametime, character, plate):
     character_left, character_bottom, character_right, character_top = character.get_bb()
@@ -16,8 +17,9 @@ def plate_collide(frametime, character, plate):
             return True, plate_top - character_bottom
     return False, 0
 
-def button_collid(frame_time, character, button_left, button_bottom, button_right, button_top):
+def button_collid(frame_time, character, button):
     character_left, character_bottom, character_right, character_top = character.get_bb()
+    button_left, button_bottom, button_right, button_top = button.get_bb()
 
     if character_left > button_right: return False
     if character_right < button_left: return False

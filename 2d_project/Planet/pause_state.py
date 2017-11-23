@@ -6,7 +6,6 @@ name = "PauseState"
 image = None
 logo_time = 0.0
 
-
 def enter():
     global image
     open_canvas()
@@ -47,7 +46,3 @@ def pause(): pass
 
 
 def resume(): pass
-
-
-
-

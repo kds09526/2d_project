@@ -73,8 +73,7 @@ def update(frame_time):
 
     if astronaut.is_shot == True:
         for button in  menu_button:
-            t_button_left, t_button_bottom, t_button_right, t_button_top = button.get_bb()
-            if collision.button_collid(frame_time, astronaut, t_button_left, t_button_bottom, t_button_right, t_button_top):
+            if collision.button_collid(frame_time, astronaut, button):
                 if button.scene == None:
                     game_framework.quit()
                 else:

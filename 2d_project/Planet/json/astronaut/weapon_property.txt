@@ -1,0 +1,7 @@
+{
+    'normal_weapon' : { 'draw_frame_num' : 0, 'time_per_shot' : 2, 'frame_per_shot' : 2},
+    'purple_weapon' : { 'draw_frame_num' : 3, 'time_per_shot' : 3, 'frame_per_shot' : 2},
+    'yellow_weapon' : { 'draw_frame_num' : 6, 'time_per_shot' : 5, 'frame_per_shot' : 2},
+    'green_weapon'  : { 'draw_frame_num' : 9, 'time_per_shot': 2.5, 'frame_per_shot': 2},
+    'red_weapon'    : { 'draw_frame_num' : 12, 'time_per_shot' : 1, 'frame_per_shot' : 2}
+}

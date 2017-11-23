@@ -16,8 +16,6 @@ back_ground_image = None
 planets = None
 
 class Planet:
-    draw_bb_bool = False
-
     def __init__(self, degree, planet_radius, revolution_radius, revolution_speed, image_location):
         self.x = math.cos(degree) * revolution_radius + 400
         self.y = math.sin(degree) * revolution_radius + 384
@@ -26,6 +24,8 @@ class Planet:
         self.planet_radius = planet_radius
         self.degree = degree
         self.image = load_image(image_location)
+
+        self.draw_bb_bool = False
 
     def handle_event(self, event):
         if event.type == SDL_KEYDOWN and event.key == SDLK_F12:
