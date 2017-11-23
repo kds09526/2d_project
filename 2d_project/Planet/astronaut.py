@@ -75,7 +75,7 @@ class Astronaut:
 
     def __init__(self, x, y, last_plate):
         if self.image == None:
-            self.image = load_image('astronaut.png')
+            self.image = load_image('image/astronaut/astronaut.png')
             self.x, self.y = x, y
             self.last_plate = last_plate
 

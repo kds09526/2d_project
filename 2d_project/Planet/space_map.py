@@ -50,14 +50,14 @@ class Planet:
 
 def enter():
     global background_image
-    background_image = load_image('map_background.png')
+    background_image = load_image('image/map_scene/map_background.png')
 
     global planets
-    planets = [Planet(random.randint(0, 360), 33, 0, 0, 'map_sun.png'),
-               Planet(random.randint(0, 360), 22.5, 95, 1.1, 'map_earth.png'),
-               Planet(random.randint(0, 360), 18, 160, 0.9, 'map_mars.png'),
-               Planet(random.randint(0, 360), 31.5, 235, 0.7, 'map_jupiter.png'),
-               Planet(random.randint(0, 360), 27, 320, 0.5, 'map_saturn.png')]
+    planets = [Planet(random.randint(0, 360), 33, 0, 0, 'image/map_scene/planet/map_sun.png'),
+               Planet(random.randint(0, 360), 22.5, 95, 1.1, 'image/map_scene/planet/map_earth.png'),
+               Planet(random.randint(0, 360), 18, 160, 0.9, 'image/map_scene/planet/map_mars.png'),
+               Planet(random.randint(0, 360), 31.5, 235, 0.7, 'image/map_scene/planet/map_jupiter.png'),
+               Planet(random.randint(0, 360), 27, 320, 0.5, 'image/map_scene/planet/map_saturn.png')]
 
 def exit():
     global background_image

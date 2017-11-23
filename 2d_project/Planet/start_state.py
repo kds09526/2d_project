@@ -12,8 +12,8 @@ logo_time = 0.0
 def enter():
     global logo_image1, logo_image2
     open_canvas(1024,768)
-    logo_image1 = load_image('logo1.png')
-    logo_image2 = load_image('logo2.png')
+    logo_image1 = load_image('image/logo_scene/logo1.png')
+    logo_image2 = load_image('image/logo_scene/logo2.png')
 
 def exit():
     global logo_image1, logo_image2
