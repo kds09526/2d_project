@@ -15,11 +15,12 @@ class Astronaut:
     RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
 
     # 무기 프레임설정
-    weapon_property = {'normal_weapon' : { 'draw_frame_num' : 0, 'time_per_shot' : 2, 'frame_per_shot' : 2},
-                       'purple_weapon' : { 'draw_frame_num' : 3, 'time_per_shot' : 3, 'frame_per_shot' : 2},
-                       'yellow_weapon' : { 'draw_frame_num' : 6, 'time_per_shot' : 5, 'frame_per_shot' : 2},
-                       'green_weapon'  : { 'draw_frame_num' : 9, 'time_per_shot': 2.5, 'frame_per_shot': 2},
-                       'red_weapon'    : { 'draw_frame_num' : 12, 'time_per_shot' : 1, 'frame_per_shot' : 2} }
+    BLUE, PURPLE, YELLOW, GREEN, RED = 0, 1, 2, 3, 4
+    weapon_property = {BLUE   : { 'draw_frame_num' : 0, 'time_per_shot' : 2, 'frame_per_shot' : 2},
+                       PURPLE : { 'draw_frame_num' : 3, 'time_per_shot' : 1.5, 'frame_per_shot' : 2},
+                       YELLOW : { 'draw_frame_num' : 6, 'time_per_shot' : 5, 'frame_per_shot' : 2},
+                       GREEN  : { 'draw_frame_num' : 9, 'time_per_shot': 2.5, 'frame_per_shot': 2},
+                       RED    : { 'draw_frame_num' : 12, 'time_per_shot' : 1, 'frame_per_shot' : 2} }
 
     # 방향
     LEFT_DIRECT, RIGHT_DIRECT, FRONT_DIRECT = 6, 3 ,0
@@ -59,7 +60,8 @@ class Astronaut:
         self.is_shot = False
         self.shot_frame = 0
         self.shot_total_frame = 0
-        self.weapon = 'normal_weapon'
+        self.weapon = Astronaut.BLUE
+        self.make_bullet = True
 
         # 방향
         self.direction = Astronaut.RIGHT_DIRECT
@@ -155,15 +157,15 @@ class Astronaut:
 
         # 무기 교체
         elif event.type == SDL_KEYDOWN and event.key == SDLK_1:
-            self.weapon = 'normal_weapon'
+            self.weapon = Astronaut.BLUE
         elif event.type == SDL_KEYDOWN and event.key == SDLK_2:
-            self.weapon = 'purple_weapon'
+            self.weapon = Astronaut.PURPLE
         elif event.type == SDL_KEYDOWN and event.key == SDLK_3:
-            self.weapon = 'yellow_weapon'
+            self.weapon = Astronaut.YELLOW
         elif event.type == SDL_KEYDOWN and event.key == SDLK_4:
-            self.weapon = 'green_weapon'
+            self.weapon = Astronaut.GREEN
         elif event.type == SDL_KEYDOWN and event.key == SDLK_5:
-            self.weapon = 'red_weapon'
+            self.weapon = Astronaut.RED
 
         # 총발사
         elif event.type == SDL_KEYDOWN and event.key == SDLK_c:

@@ -5,6 +5,8 @@ import os
 from pico2d import *
 from astronaut import Astronaut
 from plate import Plate
+from boss import Sun
+from bullet import Bullet
 
 import game_framework
 import space_map
@@ -16,6 +18,8 @@ background_image = None
 plate_timer = 0.0
 plates = None
 astronaut = None
+sun = None
+bullets = []
 
 def enter():
     global background_image
@@ -30,6 +34,9 @@ def enter():
     global astronaut
     astronaut = Astronaut(512, 500, 115)
 
+    global sun
+    sun = Sun()
+
 def exit():
     global background_image
     del(background_image)
@@ -38,6 +45,8 @@ def exit():
     global plates
     for plate in plates:
         del(plate)
+    global sun
+    del(sun)
 
 
 def pause():
@@ -66,6 +75,8 @@ def update(frame_time):
     global plate_timer
     global plates
     global astronaut
+    global sun
+    global bullets
 
     # 발판 충돌 체크
     if not(astronaut.jump_state == Astronaut.JUMP):
@@ -80,6 +91,20 @@ def update(frame_time):
 
     astronaut.update(frame_time)
 
+    if astronaut.shot_frame == 1 and not astronaut.make_bullet:
+        astronaut.make_bullet = True
+
+    if astronaut.shot_frame == 2 and astronaut.make_bullet:
+        bullets.append(Bullet(astronaut.weapon, astronaut.x, astronaut.y, astronaut.direction))
+        astronaut.make_bullet = False
+
+    for bullet in bullets:
+        bullet.update(frame_time)
+        if not bullet.is_draw:
+            bullets.remove(bullet)
+
+    sun.update(frame_time)
+
     #delay(0.3)
 
 def draw(frame_time):
@@ -90,5 +115,10 @@ def draw(frame_time):
     for plate in plates:
         plate.draw(frame_time)
 
+    for bullet in bullets:
+        bullet.draw(frame_time)
+
+    sun.draw(frame_time)
     astronaut.draw(frame_time)
+
     update_canvas()
