@@ -109,6 +109,8 @@ def update(frame_time):
 
     for bullet in bullets:
         bullet.update(frame_time)
+        if not (bullet.color == Bullet.RED):
+            bullet.is_draw = not collision.bullet_colid(frame_time, bullet.color, bullet, sun)
         if not bullet.is_draw:
             bullets.remove(bullet)
             if bullet.direct == Bullet.RIGHT:
@@ -118,6 +120,7 @@ def update(frame_time):
                     if not sun.state == Sun.DEAD_STATE:
                         sun.state = Sun.DEAD_STATE
                         sun.dead_x = 0
+
 
     sun.update(frame_time)
     if not sun.live:
