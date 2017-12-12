@@ -20,7 +20,7 @@ class Astronaut:
                        PURPLE : { 'draw_frame_num' : 3, 'time_per_shot' : 1.5, 'frame_per_shot' : 2},
                        YELLOW : { 'draw_frame_num' : 6, 'time_per_shot' : 5, 'frame_per_shot' : 2},
                        GREEN  : { 'draw_frame_num' : 9, 'time_per_shot': 2.5, 'frame_per_shot': 2},
-                       RED    : { 'draw_frame_num' : 12, 'time_per_shot' : 1, 'frame_per_shot' : 2} }
+                       RED    : { 'draw_frame_num' : 12, 'time_per_shot' : 0.3, 'frame_per_shot' : 2} }
 
     # 방향
     LEFT_DIRECT, RIGHT_DIRECT, FRONT_DIRECT = 6, 3 ,0
@@ -92,7 +92,7 @@ class Astronaut:
 
     def update(self, frame_time):
         # 공격
-        if self.is_shot == True:
+        if self.is_shot:
             self.shot_frame = int(self.shot_total_frame) % 2 + 1
             self.shot_total_frame += self.weapon_property[self.weapon]['frame_per_shot'] * self.weapon_property[self.weapon]['time_per_shot'] * frame_time
 

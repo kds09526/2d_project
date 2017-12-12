@@ -20,6 +20,7 @@ plates = None
 astronaut = None
 sun = None
 bullets = []
+draw_bb = False
 
 def enter():
     global background_image
@@ -65,10 +66,18 @@ def handle_events(frame_time):
             if event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
                 game_framework.pop_state()
             else:
+                if event.type == SDL_KEYDOWN and event.key == SDLK_F12:
+                    global draw_bb
+                    draw_bb = not draw_bb
                 astronaut.handle_event(event)
                 global plates
                 for plate in plates:
                     plate.handle_event(event)
+                global bullets
+                for bullet in bullets:
+                    bullet.handle_event(event)
+                global sun
+                sun.handle_event(event)
 
 
 def update(frame_time):
@@ -95,16 +104,24 @@ def update(frame_time):
         astronaut.make_bullet = True
 
     if astronaut.shot_frame == 2 and astronaut.make_bullet:
-        bullets.append(Bullet(astronaut.weapon, astronaut.x, astronaut.y, astronaut.direction))
+        bullets.append(Bullet(astronaut.weapon, astronaut.x, astronaut.y, astronaut.direction, draw_bb))
         astronaut.make_bullet = False
 
     for bullet in bullets:
         bullet.update(frame_time)
         if not bullet.is_draw:
             bullets.remove(bullet)
+            if bullet.direct == Bullet.RIGHT:
+                sun.hp -= Bullet.Set[bullet.color]['damage']
+                if sun.hp <= 0:
+                    sun.hp = 0
+                    if not sun.state == Sun.DEAD_STATE:
+                        sun.state = Sun.DEAD_STATE
+                        sun.dead_x = 0
 
     sun.update(frame_time)
-
+    if not sun.live:
+        game_framework.pop_state()
     #delay(0.3)
 
 def draw(frame_time):
