@@ -24,7 +24,7 @@ class Sun:
         self.y_plus = 10
         self.width = 252
         self.height = 801
-        self.hp = 3000
+        self.hp = 2000
 
         self.state = Sun.NORMAL_STATE
         self.state_frame = 0
@@ -69,10 +69,10 @@ class Sun:
         if event.type == SDL_KEYDOWN and event.key == SDLK_F12:
             self.draw_bc_bool = not self.draw_bc_bool
 
-        if event.type == SDL_KEYDOWN and event.key == SDLK_F2:
+        if event.type == SDL_KEYDOWN and event.key == SDLK_q:
             self.state_total_frame = 0
             self.state = Sun.ATTACK_STATE
-        if event.type == SDL_KEYDOWN and event.key == SDLK_F3:
+        if event.type == SDL_KEYDOWN and event.key == SDLK_w:
             self.state = Sun.NORMAL_STATE
 
     def get_bc(self):
