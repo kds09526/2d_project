@@ -1,0 +1,7 @@
+{
+  "0" : {"draw_frame_num": 0, "total_frame": 3, "time_per": 2, "frame_per" : 2, "animation": 1},
+  "1" : {"draw_frame_num": 1, "total_frame": 4, "time_per": 0.3, "frame_per": 2, "animation": 0},
+  "2" : {"draw_frame_num": 2, "total_frame": 3, "time_per": 2, "frame_per": 2, "animation": 2},
+  "3" : {"draw_frame_num": 3, "total_frame": 3, "time_per": 2, "frame_per": 2, "animation": 1},
+  "5" : {"draw_frame_num": 5, "total_frame": 2, "time_per": 2, "frame_per" : 2, "animation": 2}
+}

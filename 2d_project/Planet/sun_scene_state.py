@@ -21,10 +21,13 @@ astronaut = None
 sun = None
 bullets = []
 draw_bb = False
+result_image = None
 
 def enter():
     global background_image
     background_image = load_image('image/sun_stage_scene/SunSceneBackGround1.png')
+    global result_image
+    result_image = load_image('image/sun_stage_scene/result.png')
 
     global plates
     plates = [Plate(351, 187, 286, 72, 'image/sun_stage_scene/plate/sun_short_plate.png'),
@@ -99,6 +102,8 @@ def update(frame_time):
             astronaut.jump_state = Astronaut.FALLING
 
     astronaut.update(frame_time)
+    if sun.state == Sun.ATTACK_STATE3:
+        astronaut.x += Astronaut.PULL_SPEED_PPS * frame_time;
 
     if astronaut.shot_frame == 1 and not astronaut.make_bullet:
         astronaut.make_bullet = True
@@ -140,5 +145,10 @@ def draw(frame_time):
 
     sun.draw(frame_time)
     astronaut.draw(frame_time)
+
+    if sun.hp == 0:
+        result_image.clip_draw(0, 190, 651, 190, 512, 384)
+    elif astronaut.life == 0:
+        result_image.clip_draw(0, 0, 651, 190, 512, 384)
 
     update_canvas()

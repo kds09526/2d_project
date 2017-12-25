@@ -3,17 +3,15 @@ import json
 from pico2d import *
 
 class Bullet:
-    BLUE, PURPLE, YELLOW, GREEN, RED = 0, 1, 2, 3, 4
-    LEFT, RIGHT = 6, 3
+    BLUE, PURPLE, YELLOW, GREEN, RED = "0", "1", "2", "3", "4"
+    LEFT, RIGHT = "6", "3"
 
     image = {BLUE: None, PURPLE: None, YELLOW: None, GREEN: None, RED: None}
 
     # 총알 세팅
-    Set ={BLUE  : {'w': 27, 'h': 9, 'speed': 400, 'damage':30, LEFT: 1, RIGHT: 0, 'total_frame': 1, 'time_per': 1, 'frame_per': 1},
-         PURPLE: {'w': 54, 'h': 15, 'speed': 300, 'damage':50, LEFT: 1, RIGHT: 0, 'total_frame': 2, 'time_per': 3, 'frame_per': 2},
-         YELLOW: {'w': 27, 'h': 27, 'speed': 600, 'damage':10, LEFT: 1, RIGHT: 0, 'total_frame': 2, 'time_per': 5, 'frame_per': 2},
-         GREEN : {'w': 27, 'h': 39, 'speed': 200, 'damage': 70, LEFT: 1, RIGHT: 0, 'total_frame': 4, 'time_per': 3, 'frame_per': 4},
-         RED   : {'w': 1024, 'h': 21, 'speed': 0, 'damage': 300, LEFT: 3, RIGHT: 0, 'total_frame': 3, 'time_per': 3, 'frame_per': 3}}
+    bullet_property_file = open('json/bullet/bullet_property.json', 'r')
+    Set = json.load(bullet_property_file)
+    bullet_property_file.close()
 
     def __init__(self, color, astronaut_x, astronaut_y, direct, draw_bb):
         # 이미지 읽어오기

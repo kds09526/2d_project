@@ -5,26 +5,40 @@ from pico2d import *
 class Sun:
     image = None
     font = None
+    life_bar_image = None
 
     # 상태
-    NORMAL_STATE, ATTACK_STATE, DEAD_STATE = 0, 1, 5
+    NORMAL_STATE, ATTACK_STATE1, ATTACK_STATE2, ATTACK_STATE3, DEAD_STATE = "0", "1", "2", "3", "5"
 
     NONE, UP_AND_DOWN, VIBRATE = 0, 1, 2
-    state_set = {NORMAL_STATE : {'draw_frame_num':0,'total_frame' : 3, 'time_per' : 2, 'frame_per' : 2, 'animation': UP_AND_DOWN},
-                 ATTACK_STATE: {'draw_frame_num': 1, 'total_frame': 4, 'time_per': 0.3, 'frame_per': 2, 'animation': NONE},
-                 DEAD_STATE   : {'draw_frame_num':5,'total_frame' : 2, 'time_per' : 2, 'frame_per' : 2, 'animation': VIBRATE}}
+    boss_state_file = open('json/boss/state.json', 'r')
+    state_set = json.load(boss_state_file)
+    boss_state_file.close()
+
+    # 라이프 바
+    life_bar_length = 675
+    life_bar_y = 730
+    lb_base_x = 370
 
     def __init__(self):
         if self.font == None:
             self.font = load_font('font/ENCR10B.TTF',16)
         if self.image == None:
             self.image = load_image('image/boss/boss_sun.png')
+        if self.life_bar_image == None:
+            self.life_bar_image = load_image('image/boss/boss_lifebar.png')
         self.x = 898
         self.y = 381
         self.y_plus = 10
         self.width = 252
         self.height = 801
-        self.hp = 2000
+
+        self.max_hp = 2000
+        self.hp = self.max_hp
+        self.life_per = self.hp // self.max_hp
+        self.lb_real_x = Sun.lb_base_x
+        self.lb_real_length = Sun.life_bar_length
+        self.lb_now_x = Sun.lb_base_x
 
         self.state = Sun.NORMAL_STATE
         self.state_frame = 0
@@ -64,6 +78,8 @@ class Sun:
         self.state_frame = int(self.state_total_frame) % Sun.state_set[self.state]['total_frame']
         self.state_total_frame += Sun.state_set[self.state]['frame_per'] * self.state_set[self.state]['time_per'] * frame_time
 
+        self.lb_real_length = (self.hp // (self.max_hp // 200)) * (Sun.life_bar_length // 200)
+
     def handle_event(self, event):
         # 바운딩서클 그리기
         if event.type == SDL_KEYDOWN and event.key == SDLK_F12:
@@ -71,7 +87,7 @@ class Sun:
 
         if event.type == SDL_KEYDOWN and event.key == SDLK_q:
             self.state_total_frame = 0
-            self.state = Sun.ATTACK_STATE
+            self.state = Sun.ATTACK_STATE3
         if event.type == SDL_KEYDOWN and event.key == SDLK_w:
             self.state = Sun.NORMAL_STATE
 
@@ -87,3 +103,7 @@ class Sun:
         self.font.draw(self.x - 200, self.y + 300, 'HP: %d' %self.hp, (255,255,0))
         if self.draw_bc_bool:
             self.draw_bc()
+
+        self.life_bar_image.clip_draw(0, 90 , 705, 45, Sun.lb_base_x, Sun.life_bar_y)
+        self.life_bar_image.clip_draw(0, 0 , Sun.life_bar_length, 45, Sun.lb_base_x, Sun.life_bar_y)
+        self.life_bar_image.clip_draw(0, 45 , Sun.life_bar_length, 45, Sun.lb_base_x, Sun.life_bar_y, self.lb_real_length, 45)

@@ -4,6 +4,7 @@ from pico2d import *
 
 class Astronaut:
     image = None
+    life_image = None
 
     # 거리 환산
     PIXEL_PER_METER = (1 / 0.03)  # 1 pixel 3 cm
@@ -14,16 +15,20 @@ class Astronaut:
     RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
     RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
 
+    # 빨려들어가는 속도
+    PULL_SPEED_KMPH = 18  # Km / Hour
+    PULL_SPEED_MPM = (PULL_SPEED_KMPH * 1000.0 / 60.0)
+    PULL_SPEED_MPS = (PULL_SPEED_MPM / 60.0)
+    PULL_SPEED_PPS = (PULL_SPEED_MPS * PIXEL_PER_METER)
+
     # 무기 프레임설정
-    BLUE, PURPLE, YELLOW, GREEN, RED = 0, 1, 2, 3, 4
-    weapon_property = {BLUE   : { 'draw_frame_num' : 0, 'time_per_shot' : 2, 'frame_per_shot' : 2},
-                       PURPLE : { 'draw_frame_num' : 3, 'time_per_shot' : 1.5, 'frame_per_shot' : 2},
-                       YELLOW : { 'draw_frame_num' : 6, 'time_per_shot' : 5, 'frame_per_shot' : 2},
-                       GREEN  : { 'draw_frame_num' : 9, 'time_per_shot': 2.5, 'frame_per_shot': 2},
-                       RED    : { 'draw_frame_num' : 12, 'time_per_shot' : 0.3, 'frame_per_shot' : 2} }
+    BLUE, PURPLE, YELLOW, GREEN, RED = "0", "1", "2", "3", "4"
+    weapon_property_file = open('json/astronaut/weapon_property.json', 'r')
+    weapon_property = json.load(weapon_property_file)
+    weapon_property_file.close()
 
     # 방향
-    LEFT_DIRECT, RIGHT_DIRECT, FRONT_DIRECT = 6, 3 ,0
+    LEFT_DIRECT, RIGHT_DIRECT, FRONT_DIRECT = "6", "3" ,"0"
 
     # 걷기 프레임
     TIME_PER_MOVE = 3.8
@@ -48,6 +53,9 @@ class Astronaut:
     def __init__(self, x, y, last_plate):
         if self.image == None:
             self.image = load_image('image/astronaut/astronaut.png')
+        if self.life_image == None:
+            self.life_image = load_image('image/astronaut/life.png')
+
         self.x, self.y = x, y
 
         # 제일아래 발판
@@ -55,6 +63,9 @@ class Astronaut:
 
         # 바운딩 박스 체크
         self.draw_bb_bool = False
+
+        # 라이프
+        self.life = 3
 
         # 공격 여부 (False == 1, True = 세로 0,1 반복)
         self.is_shot = False
@@ -191,7 +202,11 @@ class Astronaut:
         draw_rectangle(*self.get_bb())
 
     def draw(self,frame_time):
-        self.image.clip_draw((self.weapon_property[self.weapon]['draw_frame_num'] * 72) + self.move_frame * 72, (self.direction - self.shot_frame) * 96,72, 96, self.x, self.y)
+        if self.direction == "6":
+            self.image.clip_draw((self.weapon_property[self.weapon]['draw_frame_num'] * 72) + self.move_frame * 72, (6 - self.shot_frame) * 96,72, 96, self.x, self.y)
+        else:
+            self.image.clip_draw((self.weapon_property[self.weapon]['draw_frame_num'] * 72) + self.move_frame * 72, (3 - self.shot_frame) * 96, 72, 96, self.x, self.y)
         if self.draw_bb_bool:
             self.draw_bb()
             draw_rectangle(0,self.last_plate - 42,1024,0)
+        self.life_image.clip_draw(0, self.life * 18, 69, 18, self.x, self.y + 43)

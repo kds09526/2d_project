@@ -1,0 +1,7 @@
+{
+    "0" : { "draw_frame_num" : 0, "time_per_shot" : 2, "frame_per_shot" : 2},
+    "1" : { "draw_frame_num" : 3, "time_per_shot" : 1.5, "frame_per_shot" : 2},
+    "2" : { "draw_frame_num" : 6, "time_per_shot" : 5, "frame_per_shot" : 2},
+    "3" : { "draw_frame_num" : 9, "time_per_shot": 2.5, "frame_per_shot": 2},
+    "4" : { "draw_frame_num" : 12, "time_per_shot" : 0.3, "frame_per_shot" : 2}
+}
